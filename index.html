@@ -684,7 +684,7 @@
       if (d.success === "false" || d.success === false) throw new Error(d.message || "failed");
       e.target.reset();
       msg.style.color = "var(--ok)";
-      msg.textContent = "✔ Request sent! I'll reply to your email within a few hours.";
+      msg.textContent = "✔ All set! Digging into this now. Stand by for a fix.";
     }).catch(() => {
       msg.style.color = "var(--muted)";
       msg.textContent = "Redirecting to email…";
