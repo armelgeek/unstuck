@@ -208,21 +208,23 @@
   /* request modal */
   .modal{position:fixed;inset:0;background:rgba(20,20,20,.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
   .modal.open{display:flex}
-  .box{background:var(--paper);border:2px solid var(--ink);box-shadow:10px 10px 0 var(--orange);width:100%;max-width:520px;max-height:92vh;overflow:auto;padding:28px}
-  .box h3{font-family:var(--display);font-weight:900;font-size:34px;text-transform:uppercase;line-height:1;margin-bottom:6px}
-  .box p.sub{color:var(--muted);font-size:15px;margin-bottom:18px}
-  .box label{display:block;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;font-weight:600}
-  .box input,.box select,.box textarea{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:2px solid var(--ink);background:#fffdf7;color:var(--ink);transition:all .15s;border-radius:2px}
+  .box{background:var(--paper);border:2px solid var(--ink);box-shadow:10px 10px 0 var(--orange);width:100%;max-width:540px;max-height:92vh;overflow:auto;padding:24px}
+  .box h3{font-family:var(--display);font-weight:900;font-size:28px;text-transform:uppercase;line-height:1.1;margin-bottom:4px}
+  .box p.sub{color:var(--muted);font-size:14px;margin-bottom:16px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px}
+  .form-row.full{grid-template-columns:1fr}
+  .box label{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin:12px 0 6px;font-weight:600}
+  .box input,.box select,.box textarea{width:100%;font:inherit;font-size:15px;padding:11px 13px;border:2px solid var(--ink);background:#fffdf7;color:var(--ink);transition:all .15s;border-radius:2px}
   .box input:hover,.box select:hover,.box textarea:hover{background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.05)}
   .box input:focus,.box select:focus,.box textarea:focus{outline:none;border-color:var(--orange);background:#fff;box-shadow:0 0 0 3px rgba(255,90,31,.1)}
-  .box textarea{min-height:120px;resize:vertical}
-  .box .actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
-  .box button{cursor:pointer;transition:all .12s}
-  .box button[type="submit"]{flex:1;min-width:180px}
+  .box textarea{min-height:100px;resize:vertical}
+  .box .actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .box button{cursor:pointer;transition:all .12s;font-size:15px}
+  .box button[type="submit"]{flex:1;min-width:140px}
   .box button[type="submit"]:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--orange)}
   .box button[type="submit"]:active:not(:disabled){transform:translate(0,0);box-shadow:5px 5px 0 var(--orange)}
   .box button:disabled{opacity:.6;cursor:not-allowed}
-  .msg{font-family:var(--mono);font-size:13px;color:var(--orange);margin-top:14px;min-height:1.4em;line-height:1.4}
+  .msg{font-family:var(--mono);font-size:12px;color:var(--orange);margin-top:10px;min-height:1.4em;line-height:1.4}
 
   /* load animation */
   .rise{opacity:0;transform:translateY(18px);animation:rise .6s forwards}
@@ -588,18 +590,23 @@
     <h3 id="mTitle">Tell me what's stuck</h3>
     <p class="sub">I'll reply within a few hours with a yes/no and a secure payment link. You pay nothing until I confirm I can fix it.</p>
     <form id="reqForm" novalidate>
-      <label for="fName">Your name <span style="color:var(--orange)">*</span></label><input id="fName" required autocomplete="name" placeholder="Your full name">
-      <label for="fEmail">Email <span style="color:var(--orange)">*</span></label><input id="fEmail" type="email" required autocomplete="email" placeholder="you@example.com">
-      <label for="fOffer">What you need</label>
-      <select id="fOffer">
-        <option value="quickfix">Quick Fix ($79)</option>
-        <option value="shipit">Ship It ($249)</option>
-        <option value="getpaid">Get Paid ($349)</option>
-        <option value="full">Full Rescue ($790)</option>
-        <option value="unsure">Not sure yet</option>
-      </select>
-      <label for="fTool">Built with</label><input id="fTool" placeholder="Lovable, Bolt, Cursor, v0, Replit…" autocomplete="off">
-      <label for="fProblem">What's going wrong? <span style="color:var(--orange)">*</span></label><textarea id="fProblem" required placeholder="Describe the error or issue. Paste error messages if you have them."></textarea>
+      <div class="form-row">
+        <div><label for="fName">Your name <span style="color:var(--orange)">*</span></label><input id="fName" required autocomplete="name" placeholder="Your full name"></div>
+        <div><label for="fEmail">Email <span style="color:var(--orange)">*</span></label><input id="fEmail" type="email" required autocomplete="email" placeholder="you@example.com"></div>
+      </div>
+      <div class="form-row">
+        <div><label for="fOffer">What you need</label><select id="fOffer">
+          <option value="quickfix">Quick Fix ($79)</option>
+          <option value="shipit">Ship It ($249)</option>
+          <option value="getpaid">Get Paid ($349)</option>
+          <option value="full">Full Rescue ($790)</option>
+          <option value="unsure">Not sure yet</option>
+        </select></div>
+        <div><label for="fTool">Built with</label><input id="fTool" placeholder="Lovable, Bolt, Cursor, v0…" autocomplete="off"></div>
+      </div>
+      <div class="form-row full">
+        <div><label for="fProblem">What's going wrong? <span style="color:var(--orange)">*</span></label><textarea id="fProblem" required placeholder="Describe the error or issue. Paste error messages if you have them."></textarea></div>
+      </div>
       <div class="msg" id="fMsg"></div>
       <div class="actions">
         <button class="btn" type="submit">Send request →</button>
@@ -679,8 +686,11 @@
       msg.style.color = "var(--ok)";
       msg.textContent = "✔ Request sent! I'll reply to your email within a few hours.";
     }).catch(() => {
-      msg.textContent = "Couldn't send automatically. Opening your email app instead…";
-      window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Unstuck request: " + offerTxt)}&body=${encodeURIComponent(body)}`;
+      msg.style.color = "var(--muted)";
+      msg.textContent = "Redirecting to email…";
+      setTimeout(() => {
+        window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Unstuck request: " + offerTxt)}&body=${encodeURIComponent(body)}`;
+      }, 500);
     }).finally(() => { btn.disabled = false; });
   });
   document.querySelectorAll("[data-mail]").forEach(a => a.href = "mailto:" + CONFIG.email);
