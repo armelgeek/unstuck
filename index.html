@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unstuck — I fix and ship your AI-built app</title>
+<meta name="description" content="Built your app with Lovable, Bolt, Cursor or v0 and got stuck? A full-stack developer fixes it and ships it. Fixed prices, fast delivery, refund if I can't fix it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f3efe6; --paper-2:#e9e3d5; --ink:#141414; --muted:#5b574f;
+    --orange:#ff5a1f; --line:#141414; --ok:#1f7a4d;
+    --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+    --sans:"IBM Plex Sans", "Helvetica Neue", Helvetica, sans-serif;
+    --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;
+    background-image:radial-gradient(rgba(0,0,0,.06) 1px, transparent 1px);background-size:22px 22px}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+
+  /* top bar */
+  .bar{border-bottom:2px solid var(--line);background:var(--paper)}
+  .bar .wrap{display:flex;justify-content:space-between;align-items:center;height:60px}
+  .logo{font-family:var(--display);font-weight:900;font-size:28px;letter-spacing:.5px;text-decoration:none}
+  .logo span{color:var(--orange)}
+  .status{font-family:var(--mono);font-size:13px;display:flex;align-items:center;gap:8px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(31,122,77,.6);animation:pulse 2s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(31,122,77,0)}100%{box-shadow:0 0 0 0 rgba(31,122,77,0)}}
+
+  /* hero */
+  .hero{padding:72px 0 56px;display:grid;grid-template-columns:1.35fr 1fr;gap:48px;align-items:center}
+  .kicker{font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--orange);margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:900;font-size:clamp(52px,8vw,96px);line-height:.9;text-transform:uppercase}
+  h1 em{font-style:normal;background:var(--orange);color:var(--paper);padding:0 10px;display:inline-block;transform:rotate(-1.5deg)}
+  .lead{margin-top:26px;font-size:20px;max-width:560px;color:#2a2824}
+  .cta-row{margin-top:32px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-block;font-family:var(--mono);font-weight:600;font-size:15px;text-decoration:none;padding:15px 22px;border:2px solid var(--ink);
+    background:var(--ink);color:var(--paper);box-shadow:5px 5px 0 var(--orange);transition:transform .12s, box-shadow .12s}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--orange)}
+  .btn.ghost{background:transparent;color:var(--ink);box-shadow:5px 5px 0 var(--ink)}
+  .btn.ghost:hover{box-shadow:7px 7px 0 var(--ink)}
+
+  /* terminal card */
+  .term{background:var(--ink);color:#e8e2d4;font-family:var(--mono);font-size:13.5px;border:2px solid var(--ink);box-shadow:10px 10px 0 var(--orange);transform:rotate(1.2deg)}
+  .term-top{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid #333}
+  .term-top i{width:10px;height:10px;border-radius:50%;background:#444;display:block}
+  .term pre{padding:18px;white-space:pre-wrap;line-height:1.7}
+  .err{color:#ff7b5c}.okc{color:#7bd8a3}.dim{color:#8a857a}
+
+  /* sections */
+  section{padding:64px 0;border-top:2px solid var(--line)}
+  h2{font-family:var(--display);font-weight:900;font-size:clamp(38px,5vw,58px);text-transform:uppercase;line-height:1;margin-bottom:28px}
+  .symptoms{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .sym{background:var(--paper-2);border:2px solid var(--line);padding:16px 18px;font-family:var(--mono);font-size:14px}
+  .sym b{color:var(--orange);margin-right:6px}
+  .tools{margin-top:22px;color:var(--muted);font-size:15px}
+
+  /* tickets */
+  .tickets{display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+  .ticket{position:relative;background:#fffdf7;border:2px solid var(--line);padding:26px 22px 22px;display:flex;flex-direction:column}
+  .ticket.hot{box-shadow:8px 8px 0 var(--orange)}
+  .tag{font-family:var(--mono);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+  .ticket h3{font-family:var(--display);font-weight:900;font-size:36px;text-transform:uppercase;line-height:1;margin:8px 0 4px}
+  .price{font-family:var(--display);font-weight:900;font-size:54px;line-height:1;margin:10px 0 2px}
+  .price small{font-family:var(--mono);font-size:13px;font-weight:400;color:var(--muted);margin-left:6px}
+  .eta{font-family:var(--mono);font-size:13px;color:var(--orange);margin-bottom:16px}
+  .ticket ul{list-style:none;border-top:2px dashed var(--line);padding-top:14px;margin-bottom:22px;flex:1}
+  .ticket li{padding:5px 0 5px 22px;position:relative;font-size:15.5px}
+  .ticket li::before{content:"→";position:absolute;left:0;color:var(--orange);font-family:var(--mono)}
+  .ticket .for{font-size:15px;color:#2a2824;margin-bottom:14px}
+  .ticket .grp{font-family:var(--mono);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:4px 0 6px}
+  .ticket ul.inc{margin-bottom:14px}
+  .ticket ul.out{border-top:none;padding-top:0;margin-bottom:22px;flex:0}
+  .ticket ul.out li{color:var(--muted);font-size:14.5px}
+  .ticket ul.out li::before{content:"✕";color:var(--muted)}
+  .ticket.full{background:var(--ink);color:var(--paper);box-shadow:10px 10px 0 var(--orange)}
+  .ticket.full .tag,.ticket.full .grp,.ticket.full .price small{color:#a8a293}
+  .ticket.full .for{color:#d9d3c5}
+  .ticket.full ul{border-top-color:#555}
+  .ticket.full ul.out li{color:#a8a293}
+  .ticket.full .btn{background:var(--orange);border-color:var(--orange);color:var(--ink);box-shadow:5px 5px 0 var(--paper)}
+
+  .ticket .btn{text-align:center}
+  .badge{position:absolute;top:-14px;right:16px;background:var(--orange);color:var(--paper);font-family:var(--mono);font-size:12px;font-weight:600;padding:4px 10px;border:2px solid var(--line)}
+  .unsure{margin-top:28px;font-family:var(--mono);font-size:15px}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
+  .step{border-left:4px solid var(--orange);padding:4px 0 4px 18px}
+  .step h4{font-family:var(--display);font-size:26px;font-weight:700;text-transform:uppercase;margin-bottom:6px}
+  .step h4::before{counter-increment:s;content:"0" counter(s) " ";color:var(--orange)}
+
+  /* guarantee */
+  .guarantee{background:var(--ink);color:var(--paper);border-top:none}
+  .guarantee h2 span{color:var(--orange)}
+  .guarantee p{max-width:700px;font-size:19px;color:#d9d3c5}
+  .tz{margin-top:26px;font-family:var(--mono);font-size:14px;color:#a8a293}
+
+  /* about + faq */
+  .about{display:grid;grid-template-columns:1fr 1.4fr;gap:40px}
+  .about .stack{font-family:var(--mono);font-size:14px;margin-top:14px;color:var(--muted)}
+  details{border:2px solid var(--line);background:#fffdf7;margin-bottom:12px}
+  summary{cursor:pointer;padding:15px 18px;font-weight:600;list-style:none;display:flex;justify-content:space-between}
+  summary::after{content:"+";font-family:var(--mono);color:var(--orange);font-size:20px;line-height:1}
+  details[open] summary::after{content:"–"}
+  details p{padding:0 18px 16px;color:#2a2824}
+
+  footer{border-top:2px solid var(--line);padding:28px 0;font-family:var(--mono);font-size:13px;color:var(--muted)}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  /* trust strip */
+  .trust{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:30px}
+  .trust div{border:2px solid var(--line);background:#fffdf7;padding:12px 14px;font-family:var(--mono);font-size:13px}
+  .trust b{color:var(--ok);margin-right:4px}
+
+  /* proof / about */
+  .who{display:grid;grid-template-columns:220px 1fr;gap:36px;align-items:start}
+  .avatar{width:220px;height:220px;border:2px solid var(--ink);box-shadow:8px 8px 0 var(--orange);background:var(--paper-2);object-fit:cover;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:90px}
+  .who h3{font-family:var(--display);font-weight:900;font-size:40px;text-transform:uppercase;line-height:1}
+  .who .role{font-family:var(--mono);font-size:14px;color:var(--orange);margin:6px 0 16px}
+  .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .links a{font-family:var(--mono);font-size:13px;border:2px solid var(--ink);padding:7px 12px;text-decoration:none;background:#fffdf7}
+  .links a:hover{background:var(--ink);color:var(--paper)}
+  .sub-h{font-family:var(--display);font-weight:700;font-size:26px;text-transform:uppercase;margin:44px 0 16px}
+  .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .card{border:2px solid var(--line);background:#fffdf7;padding:18px;text-decoration:none;display:block}
+  a.card:hover{box-shadow:6px 6px 0 var(--orange);transform:translate(-2px,-2px)}
+  .card .t{font-weight:600;margin-bottom:4px}
+  .card .d{font-size:15px;color:var(--muted)}
+  .card .u{font-family:var(--mono);font-size:12px;color:var(--orange);margin-top:10px}
+  .quote{font-size:17px}
+  .quote cite{display:block;margin-top:12px;font-family:var(--mono);font-size:13px;font-style:normal;color:var(--muted)}
+  .hidden{display:none}
+
+  /* tech chips */
+  .techs{margin-top:18px;display:grid;gap:8px}
+  .trow{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center}
+  .tlab{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chips i{font-style:normal;font-family:var(--mono);font-size:13px;border:1.5px solid var(--ink);background:#fffdf7;padding:3px 8px}
+  @media (max-width:560px){.trow{grid-template-columns:1fr;gap:4px}}
+
+  /* report */
+  .rep-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .rep-lead{font-size:18px;color:#2a2824;margin-bottom:18px}
+  .rep-points{list-style:none}
+  .rep-points li{padding:6px 0 6px 26px;position:relative}
+  .rep-points li::before{content:"✔";position:absolute;left:0;color:var(--ok);font-weight:700}
+  .rep-card{background:#fffdf7;border:2px solid var(--ink);box-shadow:10px 10px 0 var(--orange);transform:rotate(-1deg)}
+  .rep-top{display:flex;justify-content:space-between;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:12px;letter-spacing:1.5px;padding:10px 16px}
+  .rep-ex{background:var(--orange);color:var(--ink);padding:0 6px;font-weight:600}
+  .rep-body{padding:16px 18px 20px;font-size:15px}
+  .rep-row{display:flex;justify-content:space-between;border-bottom:1px dashed #bbb;padding:6px 0;font-size:14.5px}
+  .rep-row span{color:var(--muted);font-family:var(--mono);font-size:13px}
+  .rep-ok{color:var(--ok)}
+  .rep-sec{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--orange);margin:14px 0 4px}
+  .rep-body p{color:#2a2824}
+  .rep-body .mono{font-size:13.5px}
+
+  /* final cta */
+  .final-cta{background:var(--orange);text-align:center}
+  .final-cta h2{font-size:clamp(44px,7vw,84px);line-height:.95}
+  .final-cta h2 em{font-style:normal;background:var(--ink);color:var(--paper);padding:0 12px;display:inline-block;transform:rotate(-1.2deg);margin-top:6px}
+  .final-cta p{font-size:19px;max-width:560px;margin:0 auto;color:var(--ink)}
+  .final-cta .cta-row{justify-content:center}
+  .final-cta .btn{box-shadow:5px 5px 0 var(--paper)}
+  .final-cta .btn.ghost{box-shadow:5px 5px 0 var(--ink)}
+
+  /* terms */
+  .terms{background:var(--paper-2)}
+  .terms-intro{margin:-14px 0 28px;color:var(--muted);font-size:17px}
+  .receipt{background:#fffdf7;border:2px solid var(--ink);box-shadow:10px 10px 0 var(--ink);position:relative}
+  .r-head,.r-foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:1.5px;padding:12px 22px}
+  .r-head{background:var(--ink);color:var(--paper)}
+  .r-foot{border-top:2px dashed var(--ink);color:var(--muted);letter-spacing:.5px}
+  .r-promises{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:2px dashed var(--ink)}
+  .r-promises div{padding:20px 22px;display:flex;flex-direction:column;gap:2px}
+  .r-promises div + div{border-left:2px dashed var(--ink)}
+  .r-promises b{font-family:var(--display);font-weight:900;font-size:40px;line-height:1;color:var(--orange)}
+  .r-promises span{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .r-grid{display:grid;grid-template-columns:1fr 1fr}
+  .r-item{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:22px}
+  .r-item:nth-child(odd){border-right:2px dashed var(--ink)}
+  .r-item:nth-child(-n+4){border-bottom:2px dashed var(--ink)}
+  .r-wide{grid-column:1 / -1;border-right:none!important}
+  .r-num{font-family:var(--display);font-weight:900;font-size:26px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(--orange);color:var(--ink);border:2px solid var(--ink)}
+  .r-item h4{font-family:var(--display);font-weight:900;font-size:24px;text-transform:uppercase;line-height:1.1;margin:2px 0 8px}
+  .r-item p{font-size:15.5px;color:#2a2824}
+  .r-item b{color:var(--ink)}
+  .r-contact{margin-top:10px;font-family:var(--mono);font-size:13.5px!important}
+  @media (max-width:860px){
+    .rep-wrap{grid-template-columns:1fr}
+    .rep-card{transform:none}
+    .r-grid{grid-template-columns:1fr}
+    .r-promises div{padding:14px 12px}
+    .r-promises b{font-size:26px}
+    .r-promises span{font-size:11px;line-height:1.35}
+    .r-item:nth-child(odd){border-right:none}
+    .r-item:not(:last-child){border-bottom:2px dashed var(--ink)}
+  }
+
+  /* request modal */
+  .modal{position:fixed;inset:0;background:rgba(20,20,20,.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .modal.open{display:flex}
+  .box{background:var(--paper);border:2px solid var(--ink);box-shadow:10px 10px 0 var(--orange);width:100%;max-width:520px;max-height:92vh;overflow:auto;padding:28px}
+  .box h3{font-family:var(--display);font-weight:900;font-size:34px;text-transform:uppercase;line-height:1;margin-bottom:6px}
+  .box p.sub{color:var(--muted);font-size:15px;margin-bottom:18px}
+  .box label{display:block;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;font-weight:600}
+  .box input,.box select,.box textarea{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:2px solid var(--ink);background:#fffdf7;color:var(--ink);transition:all .15s;border-radius:2px}
+  .box input:hover,.box select:hover,.box textarea:hover{background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.05)}
+  .box input:focus,.box select:focus,.box textarea:focus{outline:none;border-color:var(--orange);background:#fff;box-shadow:0 0 0 3px rgba(255,90,31,.1)}
+  .box textarea{min-height:120px;resize:vertical}
+  .box .actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+  .box button{cursor:pointer;transition:all .12s}
+  .box button[type="submit"]{flex:1;min-width:180px}
+  .box button[type="submit"]:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--orange)}
+  .box button[type="submit"]:active:not(:disabled){transform:translate(0,0);box-shadow:5px 5px 0 var(--orange)}
+  .box button:disabled{opacity:.6;cursor:not-allowed}
+  .msg{font-family:var(--mono);font-size:13px;color:var(--orange);margin-top:14px;min-height:1.4em;line-height:1.4}
+
+  /* load animation */
+  .rise{opacity:0;transform:translateY(18px);animation:rise .6s forwards}
+  .d1{animation-delay:.05s}.d2{animation-delay:.15s}.d3{animation-delay:.25s}.d4{animation-delay:.4s}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  @media (max-width:860px){
+    .hero,.about{grid-template-columns:1fr}
+    .tickets{grid-template-columns:repeat(2,1fr)}
+    .steps{grid-template-columns:1fr}
+    .trust{grid-template-columns:1fr 1fr}
+    .who{grid-template-columns:1fr}
+    .avatar{width:160px;height:160px;font-size:64px}
+    .term{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="logo" href="#">UNSTUCK<span>.</span></a>
+    <div class="status"><span class="dot"></span>taking new jobs today</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <div class="kicker rise d1">// for Lovable, Bolt, Cursor, v0 &amp; Replit builders</div>
+      <h1 class="rise d2">Your AI&nbsp;built it.<br><em>I'll ship it.</em></h1>
+      <p class="lead rise d3">You got 90% of the way there. Then deploys broke, auth looped, Stripe stopped firing, and every new prompt made it worse. I take it from here: I find what's actually broken, fix it, and get your app live, usually within 48 hours. Fixed price, and you don't pay until I've confirmed I can fix it.</p>
+      <div class="cta-row rise d4">
+        <a class="btn" href="#pricing">See fixed prices →</a>
+        <a class="btn ghost" data-link="email" href="#">Describe your problem (free)</a>
+      </div>
+    </div>
+    <div class="term rise d3" aria-hidden="true">
+      <div class="term-top"><i></i><i></i><i></i></div>
+<pre><span class="dim">$ npm run build</span>
+<span class="err">✖ Type error: Property 'user' does not exist</span>
+<span class="err">✖ Build failed with 14 errors</span>
+<span class="dim">$ # asked the AI to fix it. again.</span>
+<span class="err">✖ Build failed with 31 errors</span>
+
+<span class="dim">── handed to Unstuck ──</span>
+<span class="okc">✔ build passed</span>
+<span class="okc">✔ deployed to production</span>
+<span class="okc">✔ stripe webhook: 200 OK</span>
+<span class="okc">✔ yourapp.com is live</span></pre>
+    </div>
+  </div>
+</main>
+
+<section>
+  <div class="wrap">
+    <h2>Sound familiar?</h2>
+    <div class="symptoms">
+      <div class="sym"><b>✖</b>Works locally, breaks on deploy</div>
+      <div class="sym"><b>✖</b>Login redirects forever</div>
+      <div class="sym"><b>✖</b>Payments go through, app doesn't know</div>
+      <div class="sym"><b>✖</b>Database data disappears or leaks</div>
+      <div class="sym"><b>✖</b>Every AI fix creates two new bugs</div>
+      <div class="sym"><b>✖</b>Env vars, CORS, 500 errors… no idea why</div>
+    </div>
+    <p class="tools">I work with the code these tools produce: Next.js, React, Vite, Supabase, Postgres, Node, Stripe, Clerk / Supabase Auth, Vercel, Netlify, Railway.</p>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <h2>Fixed prices. No hourly surprises.</h2>
+    <div class="tickets">
+
+      <div class="ticket">
+        <div class="tag">Ticket #01</div>
+        <h3>Quick Fix</h3>
+        <div class="price">$79<small>one-time</small></div>
+        <div class="eta">⏱ delivered within 24h</div>
+        <p class="for">For one specific thing that's broken: an error, a crash, a feature that stopped working.</p>
+        <div class="grp">What I do</div>
+        <ul class="inc">
+          <li>Reproduce the bug and find the real cause (not just the symptom)</li>
+          <li>Fix it with the smallest clean change possible</li>
+          <li>Check the fix didn't break the pages around it</li>
+          <li>Push it to your repo as a clear, labeled commit</li>
+          <li>Send a short plain-English note: what broke, why, and how to avoid it</li>
+        </ul>
+        <div class="grp">Not included</div>
+        <ul class="out">
+          <li>A second, unrelated bug (that's another Quick Fix)</li>
+          <li>New features or redesign</li>
+        </ul>
+        <a class="btn" data-link="quickfix" href="#">Fix my bug →</a>
+      </div>
+
+      <div class="ticket hot">
+        <div class="badge">MOST POPULAR</div>
+        <div class="tag">Ticket #02</div>
+        <h3>Ship It</h3>
+        <div class="price">$249<small>one-time</small></div>
+        <div class="eta">⏱ live within 48h</div>
+        <p class="for">Your app works on your screen (or in the AI tool's preview), but it's not live for real users yet.</p>
+        <div class="grp">What I do</div>
+        <ul class="inc">
+          <li>Clean up the build errors that block deployment</li>
+          <li>Move secrets and API keys into proper environment variables</li>
+          <li>Set up a production database (Supabase, Neon or Postgres) and migrate your schema</li>
+          <li>Deploy to Vercel, Netlify or Railway on your own account</li>
+          <li>Connect your custom domain with HTTPS</li>
+          <li>Test sign-up, login and your main flows on the live site</li>
+          <li>Hand-over note: where everything lives and how to redeploy</li>
+        </ul>
+        <div class="grp">Not included</div>
+        <ul class="out">
+          <li>Payments setup (see Get Paid)</li>
+          <li>Fixing more than 3 functional bugs found along the way</li>
+        </ul>
+        <a class="btn" data-link="shipit" href="#">Ship my app →</a>
+      </div>
+
+      <div class="ticket">
+        <div class="tag">Ticket #03</div>
+        <h3>Get Paid</h3>
+        <div class="price">$349<small>one-time</small></div>
+        <div class="eta">⏱ done within 72h</div>
+        <p class="for">You want users to pay, and you need payments and accounts that actually work together.</p>
+        <div class="grp">What I do</div>
+        <ul class="inc">
+          <li>Stripe Checkout for one-time payments or subscriptions (up to 3 plans)</li>
+          <li>Webhooks that update your database when someone pays, upgrades or cancels</li>
+          <li>Customer portal so users can manage their card and subscription</li>
+          <li>Fix sign-up, login, password reset and session issues</li>
+          <li>Lock paid pages and data behind the right access checks</li>
+          <li>Full test run in Stripe test mode, then switch to live with you</li>
+        </ul>
+        <div class="grp">Not included</div>
+        <ul class="out">
+          <li>Deployment (see Ship It or Full Rescue)</li>
+          <li>Usage-based billing, marketplaces, or taxes setup</li>
+        </ul>
+        <a class="btn" data-link="getpaid" href="#">Start charging →</a>
+      </div>
+
+      <div class="ticket full">
+        <div class="tag">Ticket #04</div>
+        <h3>Full Rescue</h3>
+        <div class="price">$790<small>one-time</small></div>
+        <div class="eta">⏱ launch-ready within 5 days</div>
+        <p class="for">You're stuck on several fronts and want someone to take the whole thing from "almost works" to "real product people can pay for".</p>
+        <div class="grp">Everything in Ship It + Get Paid, plus</div>
+        <ul class="inc">
+          <li>A 30-minute kickoff call to list everything that's broken or missing</li>
+          <li>Up to 10 bugs fixed across the app</li>
+          <li>Security pass: exposed keys, open database rules, unprotected routes</li>
+          <li>Transactional emails (welcome, receipt, password reset)</li>
+          <li>Basic error monitoring so you know when something breaks</li>
+          <li>Loom video walkthrough of your app's setup</li>
+          <li>7 days of free fixes after launch</li>
+        </ul>
+        <div class="grp">Not included</div>
+        <ul class="out">
+          <li>Building major new features (I'll quote them separately)</li>
+        </ul>
+        <a class="btn" data-link="full" href="#">Rescue my app →</a>
+      </div>
+
+    </div>
+    <p class="unsure" style="color:var(--muted)">Delivery times start once payment and repo access are received.</p>
+    <p class="unsure">Not sure which one? <a data-link="email" href="#">Send me two lines about your problem</a>. I'll reply with an honest recommendation, free.</p>
+    <div class="trust">
+      <div><b>✔</b>Pay only after I confirm I can fix it</div>
+      <div><b>✔</b>GitHub access only. Never your passwords</div>
+      <div><b>✔</b>Secure checkout by Stripe</div>
+      <div><b>✔</b>Full refund if it's not fixed</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step"><h4>Describe</h4><p>Pick a ticket and tell me what's broken. It's free and takes two minutes. I reply within a few hours with a clear yes or no.</p></div>
+      <div class="step"><h4>Confirm &amp; pay</h4><p>If I can fix it, I send you a secure Stripe payment link. Once paid, you invite me to your GitHub repo. No passwords needed.</p></div>
+      <div class="step"><h4>Ship</h4><p>I fix it, push the changes, and send you a plain-English recap of what I did. You check it works on your side.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="report">
+  <div class="wrap rep-wrap">
+    <div>
+      <h2>What you get back</h2>
+      <p class="rep-lead">Not just "fixed ✔". After every job you get a short report in plain English, so you understand what was wrong and your app doesn't fall back into the same hole.</p>
+      <ul class="rep-points">
+        <li>The real cause, explained without jargon</li>
+        <li>Exactly what changed, with links to the commits</li>
+        <li>How to check it yourself on the live site</li>
+        <li>What to watch out for when you keep prompting your AI tool</li>
+      </ul>
+    </div>
+    <div class="rep-card" aria-label="Example report">
+      <div class="rep-top"><span>FIX REPORT · #0042</span><span class="rep-ex">EXAMPLE</span></div>
+      <div class="rep-body">
+        <div class="rep-row"><span>Ticket</span><b>Ship It</b></div>
+        <div class="rep-row"><span>App</span><b>Lovable + Supabase</b></div>
+        <div class="rep-row"><span>Status</span><b class="rep-ok">● Live on yourapp.com</b></div>
+        <div class="rep-sec">What was wrong</div>
+        <p>The build failed because the Supabase keys were hard-coded in 3 files, and the production URL was still pointing to the preview.</p>
+        <div class="rep-sec">What I changed</div>
+        <p class="mono">→ moved keys to env variables<br>→ fixed auth redirect URL<br>→ deployed to Vercel + custom domain</p>
+        <div class="rep-sec">Watch out for</div>
+        <p>If you ask the AI to "add Supabase" again, it may re-paste the keys. Point it to the existing <span class="mono">lib/supabase.ts</span> instead.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="guarantee">
+  <div class="wrap">
+    <h2>Can't fix it? <span>Full refund.</span></h2>
+    <p>If I look at your project and it's outside what the ticket covers, I'll tell you before touching anything and refund you in full, or quote the bigger job so you can decide. You never pay for a fix that didn't happen.</p>
+    <p class="tz">⏾ Based in GMT+3: send your problem before bed in the US, wake up to it fixed.</p>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <h2>Who's fixing it?</h2>
+    <div class="who">
+      <div id="avatarBox"></div>
+      <div>
+        <h3 id="pName"></h3>
+        <div class="role" id="pRole"></div>
+        <p id="pBio"></p>
+        <div class="techs">
+          <div class="trow"><span class="tlab">Built with</span><span class="chips"><i>Lovable</i><i>Bolt</i><i>Cursor</i><i>v0</i><i>Replit</i></span></div>
+          <div class="trow"><span class="tlab">Frontend</span><span class="chips"><i>TypeScript</i><i>Next.js</i><i>React</i><i>Vite</i><i>Tailwind</i></span></div>
+          <div class="trow"><span class="tlab">Backend &amp; data</span><span class="chips"><i>Node.js</i><i>Supabase</i><i>PostgreSQL</i><i>Prisma</i><i>Drizzle</i></span></div>
+          <div class="trow"><span class="tlab">Auth &amp; payments</span><span class="chips"><i>Supabase Auth</i><i>Clerk</i><i>Stripe</i></span></div>
+          <div class="trow"><span class="tlab">Hosting</span><span class="chips"><i>Vercel</i><i>Netlify</i><i>Railway</i></span></div>
+        </div>
+        <div class="links" id="pLinks"></div>
+      </div>
+    </div>
+
+    <div id="projWrap" class="hidden">
+      <div class="sub-h">Things I've built</div>
+      <div class="grid3" id="projects"></div>
+    </div>
+
+    <div id="helpWrap" class="hidden">
+      <div class="sub-h">Problems I've solved in public</div>
+      <div class="grid3" id="help"></div>
+    </div>
+
+    <div id="testiWrap" class="hidden">
+      <div class="sub-h">What clients say</div>
+      <div class="grid3" id="testimonials"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>FAQ</h2>
+    <details><summary>Do you need access to my accounts?</summary><p>Usually just a GitHub collaborator invite. For deploys I'll guide you to add me to your hosting project or you can share a temporary access. I never need your personal passwords.</p></details>
+    <details><summary>My app was built with Lovable / Bolt. Is that OK?</summary><p>Yes. That's exactly who this is for. Export or sync your project to GitHub and I'll take it from there. You can keep using your AI tool after.</p></details>
+    <details><summary>What if my problem is bigger than one ticket?</summary><p>I'll tell you upfront and give you a fixed quote before doing extra work. No surprise bills.</p></details>
+    <details><summary>Will you rewrite my app?</summary><p>No. I make the smallest changes that fix the problem, so your app still feels like yours and your AI tool can keep working with it.</p></details>
+    <details><summary>How do I pay?</summary><p>You never pay upfront blindly. I first look at your request and confirm I can fix it. Then I send you a secure Stripe payment link (card, Apple Pay, Google Pay). Work starts as soon as the payment goes through.</p></details>
+    <details><summary>Is my code kept private?</summary><p>Yes. Your code and data are only used to do the job, never shared or reused. I'm happy to sign your NDA before you give access. Once we're done, you can remove my access at any time.</p></details>
+    <details><summary>What if you break something?</summary><p>Every change is pushed as separate, clearly labeled commits, so anything can be reverted in one click. I work on a separate branch when possible and never touch your production data without asking.</p></details>
+    <details><summary>What if the fix doesn't work on my side?</summary><p>Tell me within 7 days of delivery. I'll fix it again at no extra cost, or refund you if I can't.</p></details>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="wrap">
+    <h2>Still stuck?<br><em>Let's get it live.</em></h2>
+    <p>Describe your problem in two minutes. I'll tell you honestly if I can fix it, and it costs nothing to ask.</p>
+    <div class="cta-row">
+      <a class="btn" data-link="email" href="#">Describe my problem (free) →</a>
+      <a class="btn ghost" href="#pricing">See prices</a>
+    </div>
+  </div>
+</section>
+
+<section id="terms" class="terms">
+  <div class="wrap">
+    <h2>Terms &amp; refunds</h2>
+    <p class="terms-intro">The short version, in plain English. No fine print hiding anywhere else.</p>
+
+    <div class="receipt">
+      <div class="r-head">
+        <span>UNSTUCK · SERVICE TERMS</span>
+        <span>OPERATED BY HAYZAR LLC</span>
+      </div>
+
+      <div class="r-promises">
+        <div><b>$0</b><span>until I confirm I can fix it</span></div>
+        <div><b>100%</b><span>refund if I can't deliver</span></div>
+        <div><b>7 days</b><span>to report a fix that doesn't work</span></div>
+      </div>
+
+      <div class="r-grid">
+        <div class="r-item">
+          <div class="r-num">01</div>
+          <div>
+            <h4>Who you're working with</h4>
+            <p>Unstuck is a service operated by <b>Hayzar LLC</b>. Payments are processed securely by Stripe and appear on your statement as <b>HAYZAR LLC</b>.</p>
+            <p class="r-contact">Questions: <a data-mail href="#">contact@hayzar.com</a></p>
+          </div>
+        </div>
+        <div class="r-item">
+          <div class="r-num">02</div>
+          <div>
+            <h4>Scope &amp; delivery</h4>
+            <p>Each ticket covers only what's listed on it. Anything extra is quoted separately and <b>needs your approval first</b>. Delivery times start once payment and repo access are received.</p>
+          </div>
+        </div>
+        <div class="r-item">
+          <div class="r-num">03</div>
+          <div>
+            <h4>Refunds</h4>
+            <p>If I can't complete what the ticket covers, you get a <b>full refund</b>. If a delivered fix doesn't work, report it within 7 days and I'll rework it for free or refund you. Refunds go back to your original payment method.</p>
+          </div>
+        </div>
+        <div class="r-item">
+          <div class="r-num">04</div>
+          <div>
+            <h4>Your code &amp; accounts</h4>
+            <p>You keep <b>full ownership</b> of your code. Hosting, database, domain and third-party fees stay on your own accounts and aren't included in ticket prices. I'm not responsible for outages of third-party services.</p>
+          </div>
+        </div>
+        <div class="r-item r-wide">
+          <div class="r-num">05</div>
+          <div>
+            <h4>Privacy</h4>
+            <p>The details you send through the request form (name, email, problem description) are delivered to my inbox through the FormSubmit email service and only used to reply to you and do the job. They're never sold or shared. Card details are handled by Stripe and never reach me. Ask anytime and I'll delete your data.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="r-foot">
+        <span>Last updated: September 2026</span>
+        <span>✔ Secure checkout by Stripe</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="y"></span> Unstuck · operated by Hayzar LLC</span>
+    <span><a href="#terms">terms &amp; refunds</a> · <a data-link="email" href="#">contact</a></span>
+  </div>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="box">
+    <h3 id="mTitle">Tell me what's stuck</h3>
+    <p class="sub">I'll reply within a few hours with a yes/no and a secure payment link. You pay nothing until I confirm I can fix it.</p>
+    <form id="reqForm" novalidate>
+      <label for="fName">Your name <span style="color:var(--orange)">*</span></label><input id="fName" required autocomplete="name" placeholder="Your full name">
+      <label for="fEmail">Email <span style="color:var(--orange)">*</span></label><input id="fEmail" type="email" required autocomplete="email" placeholder="you@example.com">
+      <label for="fOffer">What you need</label>
+      <select id="fOffer">
+        <option value="quickfix">Quick Fix ($79)</option>
+        <option value="shipit">Ship It ($249)</option>
+        <option value="getpaid">Get Paid ($349)</option>
+        <option value="full">Full Rescue ($790)</option>
+        <option value="unsure">Not sure yet</option>
+      </select>
+      <label for="fTool">Built with</label><input id="fTool" placeholder="Lovable, Bolt, Cursor, v0, Replit…" autocomplete="off">
+      <label for="fProblem">What's going wrong? <span style="color:var(--orange)">*</span></label><textarea id="fProblem" required placeholder="Describe the error or issue. Paste error messages if you have them."></textarea>
+      <div class="msg" id="fMsg"></div>
+      <div class="actions">
+        <button class="btn" type="submit">Send request →</button>
+        <button class="btn ghost" type="button" id="mClose">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  /* ===== EDIT HERE ===== */
+  // Requests from the form are sent to this address. Stripe payment links are sent by you, by email, after you confirm.
+  const CONFIG = { email: "contact@hayzar.com" };
+
+  /* ---- Trust / proof section. Empty lists stay hidden: never add fake entries. ---- */
+  const PROFILE = {
+    name: "Armel",
+    role: "Full-stack developer · 5+ years",
+    bio: "I build production SaaS apps for clients and for my own products. I spend my days in exactly the stack AI tools generate, so I know where they cut corners and how to clean it up without rewriting your whole app.",
+    photo: "",                       // e.g. "armel.jpg" (put the file next to index.html). Empty = initials.
+    links: [
+      { label: "GitHub",   url: "" },  // https://github.com/...
+      { label: "LinkedIn", url: "" },  // https://linkedin.com/in/...
+      { label: "X",        url: "" },
+      { label: "Agency",   url: "https://hayzar-code-flow.vercel.app/" }
+    ],
+    projects: [
+      // { title: "Project name", desc: "What it does, one line.", url: "https://..." },
+    ],
+    publicHelp: [
+      // Link to your best Reddit / X answers:
+      // { title: "Fixed a Lovable + Supabase auth loop", desc: "r/lovable", url: "https://reddit.com/..." },
+    ],
+    testimonials: [
+      // Only real ones, with permission:
+      // { text: "Deployed in one evening after 3 days stuck.", author: "Jane D., founder of X" },
+    ]
+  };
+  /* ====================================================================== */
+  const modal = document.getElementById("modal");
+  const offerSel = document.getElementById("fOffer");
+  const openModal = offer => { offerSel.value = offer || "unsure"; modal.classList.add("open"); document.getElementById("fName").focus(); };
+  const closeModal = () => modal.classList.remove("open");
+
+  document.querySelectorAll("[data-link]").forEach(a => {
+    const key = a.dataset.link;
+    // Every button opens the request form: you confirm first, then send the Stripe link by email.
+    a.href = "#request";
+    a.addEventListener("click", e => { e.preventDefault(); openModal(key === "email" ? "unsure" : key); });
+  });
+
+  document.getElementById("mClose").onclick = closeModal;
+  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+  document.getElementById("reqForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const v = id => document.getElementById(id).value.trim();
+    const msg = document.getElementById("fMsg");
+    if (!v("fName") || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("fEmail")) || !v("fProblem")) {
+      msg.textContent = "Please fill in your name, a valid email and the problem."; return;
+    }
+    const offerTxt = offerSel.options[offerSel.selectedIndex].text;
+    const body = `Name: ${v("fName")}\nEmail: ${v("fEmail")}\nOffer: ${offerTxt}\nBuilt with: ${v("fTool") || "-"}\n\nProblem:\n${v("fProblem")}`;
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true; msg.textContent = "Sending…";
+    fetch(`https://formsubmit.co/ajax/${CONFIG.email}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({
+        _subject: "Unstuck request: " + offerTxt, _template: "table", _replyto: v("fEmail"),
+        name: v("fName"), email: v("fEmail"), offer: offerTxt, built_with: v("fTool") || "-", problem: v("fProblem")
+      })
+    }).then(r => r.json()).then(d => {
+      if (d.success === "false" || d.success === false) throw new Error(d.message || "failed");
+      e.target.reset();
+      msg.style.color = "var(--ok)";
+      msg.textContent = "✔ Request sent! I'll reply to your email within a few hours.";
+    }).catch(() => {
+      msg.textContent = "Couldn't send automatically. Opening your email app instead…";
+      window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Unstuck request: " + offerTxt)}&body=${encodeURIComponent(body)}`;
+    }).finally(() => { btn.disabled = false; });
+  });
+  document.querySelectorAll("[data-mail]").forEach(a => a.href = "mailto:" + CONFIG.email);
+
+  // ---- render proof section ----
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const P = PROFILE;
+  document.getElementById("pName").textContent = P.name;
+  document.getElementById("pRole").textContent = P.role;
+  document.getElementById("pBio").textContent = P.bio;
+  document.getElementById("avatarBox").innerHTML = P.photo
+    ? `<img class="avatar" src="${esc(P.photo)}" alt="${esc(P.name)}">`
+    : `<div class="avatar" aria-hidden="true">${esc(P.name.trim().charAt(0).toUpperCase())}</div>`;
+  document.getElementById("pLinks").innerHTML = P.links.filter(l => l.url)
+    .map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("");
+  const fill = (list, wrapId, boxId, tpl) => {
+    if (!list.length) return;
+    document.getElementById(boxId).innerHTML = list.map(tpl).join("");
+    document.getElementById(wrapId).classList.remove("hidden");
+  };
+  const linkCard = x => `<a class="card" href="${esc(x.url)}" target="_blank" rel="noopener"><div class="t">${esc(x.title)}</div><div class="d">${esc(x.desc || "")}</div><div class="u">view ↗</div></a>`;
+  fill(P.projects, "projWrap", "projects", linkCard);
+  fill(P.publicHelp, "helpWrap", "help", linkCard);
+  fill(P.testimonials, "testiWrap", "testimonials",
+    t => `<div class="card quote">“${esc(t.text)}”<cite>— ${esc(t.author)}</cite></div>`);
+
+  document.getElementById("y").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
