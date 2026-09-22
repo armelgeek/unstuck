@@ -5,7 +5,8 @@
       "Bash(git add *)",
       "Bash(git commit -m 'Improve pricing layout and form UX *)",
       "Bash(git commit -m 'Enable profile photo *)",
-      "Bash(git commit -m 'Reduce button size and add LinkedIn profile *)"
+      "Bash(git commit -m 'Reduce button size and add LinkedIn profile *)",
+      "Bash(git commit -m 'Update profile name to full name *)"
     ]
   }
 }
